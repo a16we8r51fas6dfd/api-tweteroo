@@ -6,20 +6,29 @@ app.use(cors())
 app.use(json())
 
 const userData = []
-const tweets = [
-    {
-        username: "bobesponja",
-        avatar: "https://super.abril.com.br/wp-content/uploads/2020/09/04-09_gato_SITE.jpg?quality=70&strip=info",
-        tweet: "eu amo o hub"
-	}
-]
+const tweets = []
 
 app.post('/sign-up', (req, res) => {
     if(req.body.username && req.body.avatar) {
         userData.push(req.body)
         res.status(201).send('OK')
     } else {
-        res.status(400).send('verifique se os campos estão preenchidos corretamente')
+        res.status(400).send('Todos os campos são oborigatórios!')
+    }
+})
+
+app.post('/tweets', (req, res) => {
+    if(req.body.username && req.body.tweet) {
+        const user = userData.find(user => user.username === req.body.username)
+        const tweet = {
+            username: user.username, 
+            avatar: user.avatar, 
+            tweet: req.body.tweet
+        }
+        tweets.push(tweet)
+        res.status(201).send('OK')
+    } else {
+        res.status(400).send('Todos os campos são obrigatórios')
     }
 })
 
